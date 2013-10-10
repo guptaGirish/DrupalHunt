@@ -265,17 +265,67 @@ class ShortAnswerQuestion extends QuizQuestion {
 //matchAnswers($user_answer, $this->node->correct_answer)
 function matchAnswers($user_answer, $stored_answer)
 {
+	$user_answer = drupal_strtolower(trim($user_answer)) ;
+	$stored_answer = drupal_strtolower(trim($stored_answer)) ;
 	
-	if (drupal_strtolower($user_answer) == drupal_strtolower($stored_answer)) {
-	        return 1 ;
-        }
-        else
-        {
-        	return 0 ;
-        }
-
+	
+	$u_a = explode(" ", $user_answer) ;
+	$s_a = explode(",", $stored_answer) ;
+	//print_r($u_a) ;
+	//print_r($s_a) ;
+	$flag = 0 ;
+	//die() ; 
+	for($i=0 ; $i < count($s_a) ; $i++ )
+	{
+		//print_r($s_a[$i]) ;
+		$res = matchElements($u_a, $s_a[$i]);	
+		if( $res == 1 )
+			{
+				$flag = 1 ;
+				break ;
+			}
+		
+		
+	}
+	
+	if($flag == 1)
+	 	return 1 ;
+	 else
+	 	return 0 ;
+	 	
+	//die() ;
+	//return 0 ;
+	
+	
+	
+	
 }
 
+function matchElements($u, $s)
+{
+	//$flag = 0 ;
+	if($u == $s)
+		return 1 ;
+	
+	$count = 0 ;
+	for($i=0; $i < count($u) ; $i++ )
+	{
+		$res = strpos($s ,$u[$i]) ;
+		if( !($res === FALSE) )
+		{
+			//print_r($s);
+			//print_r($u[$i]) ;
+			$count++ ;
+		}
+	
+	}
+	
+	if($count == count($u))
+		return 1 ;
+	else 
+		return 0 ;
+
+}
 
 /**
  * Extension of QuizQuestionResponse
